@@ -1,16 +1,17 @@
-package cn.haoxiaoyong.netty.model;
-
-import com.alibaba.fastjson.annotation.JSONField;
+package cn.haoxiaoyong.netty.entity;
 
 import java.util.Date;
 
-public class User {
+/**
+ * Created by haoxy on 2019/1/7.
+ * E-mail:hxyHelloWorld@163.com
+ * github:https://github.com/haoxiaoyong1014
+ */
+public class UserInfo {
+
     private String id;
 
     private String username;
-
-    @JSONField(serialize = false)
-    private String password;
 
     private String picSmall;
 
@@ -33,7 +34,7 @@ public class User {
     }
 
     public void setId(String id) {
-        this.id = id == null ? null : id.trim();
+        this.id = id;
     }
 
     public String getUsername() {
@@ -41,15 +42,7 @@ public class User {
     }
 
     public void setUsername(String username) {
-        this.username = username == null ? null : username.trim();
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.username = username;
     }
 
     public String getPicSmall() {
@@ -57,7 +50,7 @@ public class User {
     }
 
     public void setPicSmall(String picSmall) {
-        this.picSmall = picSmall == null ? null : picSmall.trim();
+        this.picSmall = picSmall;
     }
 
     public String getPicNormal() {
@@ -65,7 +58,7 @@ public class User {
     }
 
     public void setPicNormal(String picNormal) {
-        this.picNormal = picNormal == null ? null : picNormal.trim();
+        this.picNormal = picNormal;
     }
 
     public String getNickname() {
@@ -73,7 +66,7 @@ public class User {
     }
 
     public void setNickname(String nickname) {
-        this.nickname = nickname == null ? null : nickname.trim();
+        this.nickname = nickname;
     }
 
     public String getQrcode() {
@@ -81,7 +74,7 @@ public class User {
     }
 
     public void setQrcode(String qrcode) {
-        this.qrcode = qrcode == null ? null : qrcode.trim();
+        this.qrcode = qrcode;
     }
 
     public String getClientId() {
@@ -89,7 +82,7 @@ public class User {
     }
 
     public void setClientId(String clientId) {
-        this.clientId = clientId == null ? null : clientId.trim();
+        this.clientId = clientId;
     }
 
     public String getSign() {
@@ -97,7 +90,7 @@ public class User {
     }
 
     public void setSign(String sign) {
-        this.sign = sign == null ? null : sign.trim();
+        this.sign = sign;
     }
 
     public Date getCreatetime() {
@@ -113,6 +106,22 @@ public class User {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone == null ? null : phone.trim();
+        this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", picSmall='" + picSmall + '\'' +
+                ", picNormal='" + picNormal + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", qrcode='" + qrcode + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", sign='" + sign + '\'' +
+                ", createtime=" + createtime +
+                ", phone='" + phone + '\'' +
+                '}';
     }
 }

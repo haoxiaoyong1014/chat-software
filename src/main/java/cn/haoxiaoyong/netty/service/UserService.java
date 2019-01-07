@@ -16,4 +16,13 @@ public interface UserService {
      */
     List<User> selectAll();
 
+    /**
+     * 用作登录
+     * @param username
+     * @param password
+     * @return
+     */
+    User login(String username, String password);
+
+    void register(User user);
 }

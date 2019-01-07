@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>聊天案例</title>
+</head>
+<body>
+<input type="text" id="message">
+<input type="button" value="发送消息" onclick="sendMsg()">
+接收到消息:
+<p id="server_message" style="background-color: #AAAAAA"></p>
+
+
+<script>
+    var websocket = null;
+    //判断当前浏览器是否支持 webSocket
+    if (window.WebSocket) {
+        websocket = new WebSocket("ws://127.0.0.1:9001/ws");
+        websocket.onopen = function (ev) {
+            console.log("建立连接");
+        }
+        websocket.onclose = function (ev) {
+            console.log("断开连接");
+        }
+        websocket.onmessage = function (ev) {
+            console.log("接收到服务器的消息" + ev.data);
+            var server_message = document.getElementById("server_message");
+            server_message.innerHTML += ev.data + "<br/>";
+        }
+    } else {
+        alert("当前浏览器不支持 webSocket")
+    }
+
+    function sendMsg() {
+        var message = document.getElementById("message");
+        websocket.send(message.value)
+    }
+</script>
+</body>
+</html>
