@@ -1,8 +1,10 @@
 package cn.haoxiaoyong.netty;
 
+import cn.haoxiaoyong.netty.util.IdWorker;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 
 /**
@@ -12,8 +14,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan({"cn.haoxiaoyong.netty.mapper"})
+//@EnableFeignClients
 public class NettyApplication {
     public static void main(String[] args) {
         SpringApplication.run(NettyApplication.class, args);
+    }
+    @Bean
+    public IdWorker idWorker(){
+        return new IdWorker();
     }
 }

@@ -48,7 +48,6 @@ public class UserController {
 
     @RequestMapping(value = "register")
     public Result register(@RequestBody User user) {
-
         try {
             userService.register(user);
             return new Result(true, "注册成功");
@@ -57,4 +56,5 @@ public class UserController {
             return new Result(false, e.getMessage());
         }
     }
+
 }
