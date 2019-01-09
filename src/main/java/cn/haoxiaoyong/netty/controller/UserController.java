@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,6 +56,13 @@ public class UserController {
             e.printStackTrace();
             return new Result(false, e.getMessage());
         }
+    }
+
+    @RequestMapping(value = "upload")
+    public Result upload(MultipartFile file, String userid) {
+
+        User user = userService.upload(file, userid);
+        return null;
     }
 
 }

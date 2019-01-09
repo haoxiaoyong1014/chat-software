@@ -4,12 +4,15 @@ import cn.haoxiaoyong.netty.mapper.UserMapper;
 import cn.haoxiaoyong.netty.model.User;
 import cn.haoxiaoyong.netty.model.UserExample;
 import cn.haoxiaoyong.netty.service.UserService;
+import cn.haoxiaoyong.netty.util.FastDFSClient;
 import cn.haoxiaoyong.netty.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private IdWorker idWorker;
+    @Autowired
+    private FastDFSClient fastDFSClient;
+
 
     @Override
     public List<User> selectAll() {
@@ -68,5 +74,24 @@ public class UserServiceImpl implements UserService {
         user.setCreatetime(new Date());
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         userMapper.insert(user);
+    }
+
+    @Override
+    public User upload(MultipartFile file, String userid) {
+        try {
+            //返回在FastDFS中的URL路径,这个路径不带 http://ip/..
+            String url = fastDFSClient.uploadFace(file);
+            //在FastDFS上传的时候,会自动生成一个缩略图
+            //文件名_150x150.后缀
+            String[] fileNameList = url.split("\\.");
+            String fileName = fileNameList[0];
+            String ext = fileNameList[1];
+            String picSmallUrl = fileName + "_150x150." + ext;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

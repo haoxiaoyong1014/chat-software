@@ -1,6 +1,7 @@
 package cn.haoxiaoyong.netty.service;
 
 import cn.haoxiaoyong.netty.model.User;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,5 +25,17 @@ public interface UserService {
      */
     User login(String username, String password);
 
+    /**
+     * 用户注册
+     * @param user
+     */
     void register(User user);
+
+    /**
+     * 上传文件: 图片头像
+     * @param file
+     * @param userid
+     * @return
+     */
+    User upload(MultipartFile file, String userid);
 }
