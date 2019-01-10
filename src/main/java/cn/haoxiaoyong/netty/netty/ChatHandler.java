@@ -25,7 +25,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame textWebSocketFrame) throws Exception {
         String content = textWebSocketFrame.text();
-        System.out.println("接收到的数据: " + content);
+       System.out.println("接收到的数据: " + content);
 
         //将接收的消息发送所有的客户端
         for (Channel channel : channels) {

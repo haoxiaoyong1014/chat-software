@@ -5,8 +5,11 @@ import com.github.tobato.fastdfs.FdfsClientConfig;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+
+import javax.servlet.MultipartConfigElement;
 
 
 /**
@@ -24,5 +27,14 @@ public class NettyApplication {
     @Bean
     public IdWorker idWorker(){
         return new IdWorker();
+    }
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        //文件最大
+        factory.setMaxFileSize("5120KB"); //KB,MB
+        /// 设置总上传数据总大小
+        factory.setMaxRequestSize("5120KB");
+        return factory.createMultipartConfig();
     }
 }

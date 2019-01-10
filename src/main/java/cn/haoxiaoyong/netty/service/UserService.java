@@ -38,4 +38,18 @@ public interface UserService {
      * @return
      */
     User upload(MultipartFile file, String userid);
+
+    /**
+     * 修改用户昵称
+     * @param id
+     * @param nickname
+     */
+    void updateNickName(String id, String nickname);
+
+    /**
+     * 重新加载用户
+     * @param userid
+     * @return
+     */
+    User reloadUser(String userid);
 }

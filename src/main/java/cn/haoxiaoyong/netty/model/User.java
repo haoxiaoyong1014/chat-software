@@ -115,4 +115,21 @@ public class User {
     public void setPhone(String phone) {
         this.phone = phone == null ? null : phone.trim();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", picSmall='" + picSmall + '\'' +
+                ", picNormal='" + picNormal + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", qrcode='" + qrcode + '\'' +
+                ", clientId='" + clientId + '\'' +
+                ", sign='" + sign + '\'' +
+                ", createtime=" + createtime +
+                ", phone='" + phone + '\'' +
+                '}';
+    }
 }

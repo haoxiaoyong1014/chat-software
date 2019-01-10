@@ -6,13 +6,15 @@ import cn.haoxiaoyong.netty.model.UserExample;
 import cn.haoxiaoyong.netty.service.UserService;
 import cn.haoxiaoyong.netty.util.FastDFSClient;
 import cn.haoxiaoyong.netty.util.IdWorker;
+import cn.haoxiaoyong.netty.util.QRCodeUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +33,10 @@ public class UserServiceImpl implements UserService {
     private IdWorker idWorker;
     @Autowired
     private FastDFSClient fastDFSClient;
+    @Value("${fdfs.httpurl}")
+    private String httpUrl;
+    @Autowired
+    private QRCodeUtils qrCodeUtils;
 
 
     @Override
@@ -72,6 +78,9 @@ public class UserServiceImpl implements UserService {
         user.setId(idWorker.nextId());
         user.setNickname(user.getUsername());
         user.setCreatetime(new Date());
+        //生成用户专属二维码
+
+        user.setQrcode("");
         user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
         userMapper.insert(user);
     }
@@ -81,17 +90,47 @@ public class UserServiceImpl implements UserService {
         try {
             //返回在FastDFS中的URL路径,这个路径不带 http://ip/..
             String url = fastDFSClient.uploadFace(file);
+            System.out.println("url" + url);
             //在FastDFS上传的时候,会自动生成一个缩略图
             //文件名_150x150.后缀
             String[] fileNameList = url.split("\\.");
             String fileName = fileNameList[0];
             String ext = fileNameList[1];
             String picSmallUrl = fileName + "_150x150." + ext;
-
-        } catch (IOException e) {
+            User user = userMapper.selectByPrimaryKey(userid);
+            //设置头像的大图片
+            user.setPicNormal(httpUrl + url);
+            //设置头像小图
+            user.setPicSmall(httpUrl + picSmallUrl);
+            userMapper.updateByPrimaryKey(user);
+            return user;
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
+    }
 
-        return null;
+    @Override
+    public void updateNickName(String id, String nickname) {
+        if (StringUtils.isNotBlank(nickname)) {
+            User user = userMapper.selectByPrimaryKey(id);
+            user.setNickname(nickname);
+            userMapper.updateByPrimaryKey(user);
+        } else {
+            throw new RuntimeException("用户昵称不能为空");
+        }
+    }
+
+    @Override
+    public User reloadUser(String userid) {
+        if (StringUtils.isNotBlank(userid)) {
+            User user = userMapper.selectByPrimaryKey(userid);
+            if (user != null) {
+                return user;
+            }
+            return null;
+        } else {
+            throw new RuntimeException("userid 不能为空!");
+        }
     }
 }
