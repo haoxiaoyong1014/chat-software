@@ -52,4 +52,12 @@ public interface UserService {
      * @return
      */
     User reloadUser(String userid);
+
+    /**
+     * 搜索好友
+     * @param userid
+     * @param friendUsername
+     * @return
+     */
+    User findByUsername(String userid, String friendUsername);
 }

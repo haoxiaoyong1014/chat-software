@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -37,6 +39,8 @@ public class UserServiceImpl implements UserService {
     private String httpUrl;
     @Autowired
     private QRCodeUtils qrCodeUtils;
+
+    private String QRpath = "/tmp/";
 
 
     @Override
@@ -68,21 +72,29 @@ public class UserServiceImpl implements UserService {
     @Override
     public void register(User user) {
         //要判断这个用户是否存在
-        UserExample example = new UserExample();
-        example.createCriteria().andUsernameEqualTo(user.getUsername());
-        List<User> users = userMapper.selectByExample(example);
-        if (users != null && users.size() > 0) {
-            throw new RuntimeException("用户已经存在!");
+        try {
+            UserExample example = new UserExample();
+            example.createCriteria().andUsernameEqualTo(user.getUsername());
+            List<User> users = userMapper.selectByExample(example);
+            if (users != null && users.size() > 0) {
+                throw new RuntimeException("用户已经存在!");
+            }
+            //否则将用户信息保存到数据库
+            user.setId(idWorker.nextId());
+            user.setNickname(user.getUsername());
+            user.setCreatetime(new Date());
+            //生成用户专属二维码,二维码的内容是用户名
+            String qrContent = user.getUsername();
+            String file = QRpath + user.getUsername() + ".png";
+            qrCodeUtils.createQRCode(file, qrContent);
+            String fastPath = fastDFSClient.uploadFile(new File(file));
+            user.setQrcode(httpUrl + fastPath);
+            user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
+            userMapper.insert(user);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("注册失败");
         }
-        //否则将用户信息保存到数据库
-        user.setId(idWorker.nextId());
-        user.setNickname(user.getUsername());
-        user.setCreatetime(new Date());
-        //生成用户专属二维码
-
-        user.setQrcode("");
-        user.setPassword(DigestUtils.md5DigestAsHex(user.getPassword().getBytes()));
-        userMapper.insert(user);
     }
 
     @Override
@@ -132,5 +144,16 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new RuntimeException("userid 不能为空!");
         }
+    }
+
+    @Override
+    public User findByUsername(String userid, String friendUsername) {
+        UserExample example = new UserExample();
+        example.createCriteria().andUsernameEqualTo(friendUsername);
+        List<User> users = userMapper.selectByExample(example);
+        if (!users.isEmpty()) {
+            return users.get(0);
+        }
+        return null;
     }
 }

@@ -108,4 +108,13 @@ public class UserController {
             return new Result(false, "查询失败");
         }
     }
+
+    @RequestMapping(value = "findByUsername")
+    public Result findByUsername(String userid, String friendUsername) {
+        User user = userService.findByUsername(userid, friendUsername);
+        if (user != null) {
+            return new Result(true, "搜索成功", user);
+        }
+        return new Result(false, "此用户不存在");
+    }
 }
