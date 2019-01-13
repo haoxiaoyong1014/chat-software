@@ -10,6 +10,7 @@ import cn.haoxiaoyong.netty.util.QRCodeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
@@ -41,7 +42,9 @@ public class UserServiceImpl implements UserService {
     private QRCodeUtils qrCodeUtils;
 
     private String QRpath = "/tmp/";
-
+    private String windowsQRpath = "D:\\xiaoyong_File/";
+    @Autowired
+    private Environment env;
 
     @Override
     public List<User> selectAll() {
@@ -85,7 +88,12 @@ public class UserServiceImpl implements UserService {
             user.setCreatetime(new Date());
             //生成用户专属二维码,二维码的内容是用户名
             String qrContent = user.getUsername();
-            String file = QRpath + user.getUsername() + ".png";
+            String property = env.getProperty("os.name");
+            String file = null;
+            if (property.contains("Windows"))
+                file = windowsQRpath + user.getUsername() + ".png";
+            else
+            file = QRpath + user.getUsername() + ".png";
             qrCodeUtils.createQRCode(file, qrContent);
             String fastPath = fastDFSClient.uploadFile(new File(file));
             user.setQrcode(httpUrl + fastPath);

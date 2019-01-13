@@ -15,6 +15,11 @@ import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import org.springframework.stereotype.Component;
 
+/**
+ * Created by haoxy on 2019/1/7.
+ * E-mail:hxyHelloWorld@163.com
+ * github:https://github.com/haoxiaoyong1014
+ */
 @Component
 public class QRCodeUtils {
 

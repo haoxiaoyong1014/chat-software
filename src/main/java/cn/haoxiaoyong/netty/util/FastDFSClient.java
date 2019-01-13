@@ -16,6 +16,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * Created by haoxy on 2019/1/7.
+ * E-mail:hxyHelloWorld@163.com
+ * github:https://github.com/haoxiaoyong1014
+ */
 @Component
 public class FastDFSClient {
 
