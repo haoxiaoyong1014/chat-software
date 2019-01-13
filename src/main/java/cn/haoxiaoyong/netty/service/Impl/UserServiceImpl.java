@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     private QRCodeUtils qrCodeUtils;
 
     private String QRpath = "/tmp/";
-    private String windowsQRpath = "D:\\xiaoyong_File/";
+    private String windowsQRpath = "D:\\";
     @Autowired
     private Environment env;
 
