@@ -3,6 +3,7 @@ package cn.haoxiaoyong.netty.service.Impl;
 import cn.haoxiaoyong.netty.mapper.ChatRecordMapper;
 import cn.haoxiaoyong.netty.model.ChatRecord;
 import cn.haoxiaoyong.netty.model.ChatRecordExample;
+import cn.haoxiaoyong.netty.model.User;
 import cn.haoxiaoyong.netty.service.ChatRecordService;
 import cn.haoxiaoyong.netty.util.IdWorker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,32 @@ public class ChatRecordServiceImpl implements ChatRecordService {
         criteria2.andHasDeleteEqualTo(0);
         example.or(criteria1);
         example.or(criteria2);
+
+        //把所有发给当前用户的消息设置为已读
+        ChatRecordExample exampleHasRead=new ChatRecordExample();
+        exampleHasRead.createCriteria().andFriendidEqualTo(userid).andHasReadEqualTo(0);
+
+        List<ChatRecord> chatRecords = chatRecordMapper.selectByExample(exampleHasRead);
+        for (ChatRecord chatRecord : chatRecords) {
+            chatRecord.setHasRead(1);
+            chatRecordMapper.updateByPrimaryKey(chatRecord);
+        }
+
         return chatRecordMapper.selectByExample(example);
+    }
+
+    @Override
+    public List<ChatRecord> findUnreadByUserid(String userid) {
+
+        ChatRecordExample example = new ChatRecordExample();
+        example.createCriteria().andHasReadEqualTo(0);
+        return chatRecordMapper.selectByExample(example);
+    }
+
+    @Override
+    public void updateChatRecordHasRead(String id) {
+        ChatRecord chatRecord = chatRecordMapper.selectByPrimaryKey(id);
+        chatRecord.setHasRead(1);
+        chatRecordMapper.updateByPrimaryKey(chatRecord);
     }
 }

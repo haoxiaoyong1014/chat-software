@@ -11,7 +11,10 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +29,8 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:MM");
 
     private static ChannelGroup channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+
+    private static ApplicationContext applicationContext;
 
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame textWebSocketFrame) throws Exception {
@@ -55,6 +60,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                     System.out.println("用户" + chatRecord.getFriendid() + "不在线");
                 }
                 break;
+            case 2:
+                //将消息设置为已读
+                chatRecordService.updateChatRecordHasRead(message.getChatRecord().getId());
         }
         /*//将接收的消息发送所有的客户端
         for (Channel channel : channels) {
@@ -85,4 +93,5 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         ctx.channel().close();
         UserChannelMap.print();
     }
+
 }
