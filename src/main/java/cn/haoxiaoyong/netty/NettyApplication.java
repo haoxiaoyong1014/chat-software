@@ -37,4 +37,5 @@ public class NettyApplication {
         factory.setMaxRequestSize("5120KB");
         return factory.createMultipartConfig();
     }
+
 }

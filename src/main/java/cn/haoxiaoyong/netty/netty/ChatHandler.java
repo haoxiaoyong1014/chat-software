@@ -41,13 +41,13 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
         ChatRecordService chatRecordService = SpringUtil.getBean(ChatRecordService.class);
         switch (message.getType()) {
             //处理客户端链接的消息
-            case 0:
+            case 0:   //表示连接
                 //建立用户和通道之间的关系
                 UserChannelMap.put(message.getChatRecord().getUserid(), channelHandlerContext.channel());
                 System.out.println(message.getChatRecord().getUserid() + "与" + channelHandlerContext.channel().id() + "建立了关联");
                 UserChannelMap.print();
                 break;
-            case 1:
+            case 1:  //表示发送消息
                 //将消息保存到数据库
                 ChatRecord chatRecord = message.getChatRecord();
                 chatRecordService.insert(chatRecord);
@@ -60,9 +60,13 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
                     System.out.println("用户" + chatRecord.getFriendid() + "不在线");
                 }
                 break;
-            case 2:
+            case 2:  //接收消息
                 //将消息设置为已读
                 chatRecordService.updateChatRecordHasRead(message.getChatRecord().getId());
+                break;
+            case 3: //检测心跳
+                //接收心跳信息
+                System.out.println("接收到心跳消息"+JSON.toJSONString(message));
         }
         /*//将接收的消息发送所有的客户端
         for (Channel channel : channels) {
