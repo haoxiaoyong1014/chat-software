@@ -16,11 +16,11 @@ import java.io.IOException;
  * E-mail:hxyHelloWorld@163.com
  * github:https://github.com/haoxiaoyong1014
  */
-@SpringBootTest(classes = NettyApplication.class)
-@RunWith(SpringRunner.class)
+/*@SpringBootTest(classes = NettyApplication.class)
+@RunWith(SpringRunner.class)*/
 public class TestFastDFS {
 
-    @Autowired
+   /* @Autowired
     private FastDFSClient fastDFSClient;
 
     @Test
@@ -28,5 +28,15 @@ public class TestFastDFS {
         String path = fastDFSClient.uploadFile(new File("/Users/haoxiaoyong/mui/chat-view/unpackage/release/H51F4EF0F_0114164246.apk"));
         System.out.println(path);
 
-    }
+    }*/
+
+    /*public static void main(String[] args) {
+
+        for (int i = 0; i < 100000; i++) {
+            System.out.println("就是计算机技术");
+        }
+        for (int i = 0;i<100000;i++){
+            System.out.println("少年强，侧国强");
+        }
+    }*/
 }
